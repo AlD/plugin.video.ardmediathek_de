@@ -180,6 +180,7 @@ def rssParser(data):
 		else:
 			plot = infos[1].replace('\n','')+'\n\n'+infos[2]
 		link = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)[0]
+		link = link.replace('&amp;', '&')
 		documentId = link.split('documentId=')[1]
 		if '&' in documentId:
 			documentId = documentId.split('&')[0]
@@ -193,8 +194,11 @@ def rssParser(data):
 
 def runtimeToInt(runtime):
 	t = runtime.replace('Min','').replace('min','').replace('.','').replace(' ','')
-	HHMM = t.split(':')
-	return int(HHMM[0])*60 + int(HHMM[1])
+	if ':' in t:
+		HHMM = t.split(':')
+		return int(HHMM[0])*60 + int(HHMM[1])
+	else:
+		return int(t)
 
 def checkLive(date):
 	date = date.replace(' '+date.split(' ')[-1],'')#python 2.7 doesnt support %z
