@@ -181,7 +181,11 @@ def rssParser(data):
 			plot = infos[1].replace('\n','')+'\n\n'+infos[2]
 		link = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)[0]
 		link = link.replace('&amp;', '&')
-		documentId = link.split('documentId=')[1]
+		if 'documentId=' in link:
+			documentId = link.split('documentId=')[1]
+		else:
+			# Live streams have "kanal=" instead of "documentId="
+			continue
 		if '&' in documentId:
 			documentId = documentId.split('&')[0]
 		split = infos[2].split('|')
